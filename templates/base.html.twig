@@ -2,11 +2,21 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}1e9{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        {% block body %}
+            <div id="main--container">Hello World !</div>
+        {% endblock %}
+        {% block javascripts %}
+            <script>
+                const es = new EventSource('http://localhost:9090/hub?topic=' + encodeURIComponent('1e9'));
+                es.onmessage = e => {
+                    const data = JSON.parse(e.data);
+                    document.getElementById('main--container').innerHTML = data.headline;
+                }
+            </script>
+        {% endblock %}
     </body>
 </html>
