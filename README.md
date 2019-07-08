@@ -7,5 +7,5 @@ docker run --rm -it -v $PWD:/app composer create-project symfony/website-skeleto
 ## Install the Mercure component
 docker run --rm -it -v $PWD:/app composer require mercure
 
-## Run the Symfony application
+## Run the infrastructure
 docker-compose up
