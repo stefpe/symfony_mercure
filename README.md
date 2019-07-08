@@ -3,7 +3,9 @@ Example how to get up and running with symfony mercure
 
 ## Install Symfony
 docker run --rm -it -v $PWD:/app composer create-project symfony/website-skeleton symfony_mercure
+
 docker run --rm -it -v $PWD:/app composer remove doctrine
+
 docker run --rm -it -v $PWD:/app composer remove mailer
 
 ## Install the Mercure component
