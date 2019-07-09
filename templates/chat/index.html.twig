@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ChatController!{% endblock %}
+
+{% block body %}
+    <h1>Chat example</h1>
+
+    <form>
+        <input name="username" placeholder="username" size="10">
+        <input name="message" placeholder="Your message..." size="50" autocomplete="off">
+        <input type="submit" value="Post">
+    </form>
+    <hr>
+
+    <div id="messages">
+        No messages
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+<script type="application/json" id="config">
+    {{ config|json_encode()|raw }}
+</script>
+<script>
+    const {topic, publishRoute} = JSON.parse(document.getElementById('config').textContent);
+
+    const subscribeURL = new URL('http://localhost:9090/hub');
+    subscribeURL.searchParams.append('topic', topic);
+
+    const es = new EventSource(subscribeURL);
+    let ul = null;
+    es.onmessage = ({data}) => {
+        const {username, message} = JSON.parse(data)
+        if (!username || !message) throw new Error('Invalid payload')
+
+        if (!ul) {
+            ul = document.createElement('ul');
+
+            const messages = document.getElementById('messages');
+            messages.innerHTML = '';
+            messages.append(ul);
+        }
+
+        const li = document.createElement('li')
+        li.append(document.createTextNode(`<${username}> ${message}`))
+        ul.append(li)
+    };
+
+    document.querySelector('form').onsubmit = function (e) {
+        e.preventDefault();
+
+        fetch(publishRoute, {method: 'POST', body: JSON.stringify({username: this.elements.username.value, message: this.elements.message.value})});
+        this.elements.message.value = '';
+        this.elements.message.focus();
+    }
+</script>
+{% endblock %}

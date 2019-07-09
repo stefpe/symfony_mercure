@@ -9,17 +9,28 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    <div id="main--container">Hello World !</div>
+    <h1>Subscriber example</h1>
+    <div id="main--container"></div>
 </div>
 {% endblock %}
 
 {% block javascripts %}
     <script>
-        const es = new EventSource('http://localhost:9090/hub?topic=' + encodeURIComponent('1e9'));
+        let ul = null;
+        const es = new EventSource('http://localhost:9090/hub?topic=1e9');
         es.onmessage = e => {
             const data = JSON.parse(e.data);
-            document.getElementById('main--container').innerHTML = data.headline;
+
+            if (!ul) {
+                ul = document.createElement('ul');
+
+                const messages = document.getElementById('main--container');
+                messages.innerHTML = '';
+                messages.append(ul);
+            }
+
+            const li = document.createElement('li');
+            li.append(document.createTextNode(data.headline));
+            ul.append(li);
         }
     </script>{% endblock %}
