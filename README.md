@@ -28,7 +28,7 @@ curl --request POST \
  
 ## Mercure Demo UI: http://localhost:9090/
 
-## Todo
-- Create a client controller: `php bin/console make:controller`
-- Create a publisher controller to publish content e.g. /publish/{topic}
-- Create a chat example
+## Routes
+- Client example: localhost:8080/client
+- Chat example: localhost:8080/chat
+- Publisher example POST route: localhost:8080/publish/{topic} 
