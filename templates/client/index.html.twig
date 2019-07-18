@@ -17,8 +17,17 @@
 {% block javascripts %}
     <script>
         let ul = null;
-        const es = new EventSource('http://localhost:9090/hub?topic=1e9');
+        const hubUrl = new URL('http://localhost:9090/hub');
+        hubUrl.searchParams.append('topic', '1e9');
+
+        const lastEventId = localStorage.getItem('lastEventId');
+        if (lastEventId != null){
+            hubUrl.searchParams.append('Last-Event-ID', lastEventId);
+        }
+
+        const es = new EventSource(hubUrl);
         es.onmessage = e => {
+            localStorage.setItem('lastEventId', e.lastEventId);
             const data = JSON.parse(e.data);
 
             if (!ul) {
