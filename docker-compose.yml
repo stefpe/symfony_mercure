@@ -22,7 +22,7 @@ services:
       - "8080:80"
 
   mercure:
-    image: dunglas/mercure
+    image: dunglas/mercure:v0.5
     environment:
       - JWT_KEY=myJWTKey
       - DEMO=1
